@@ -39,9 +39,15 @@ export const betSlipRepository = {
    * Atomically replaces the full BetSlip for (userId, roundId) — upsert semantics.
    */
   async upsert(input: UpsertBetSlipInput): Promise<IBetSlip> {
+    if (!mongoose.isValidObjectId(input.userId) || !mongoose.isValidObjectId(input.roundId)) {
+      throw new Error('Invalid userId or roundId')
+    }
     const now = new Date()
     const doc = await BetSlipModel.findOneAndUpdate(
-      { userId: input.userId, roundId: input.roundId },
+      {
+        userId: new mongoose.Types.ObjectId(input.userId),
+        roundId: new mongoose.Types.ObjectId(input.roundId),
+      },
       {
         $set: {
           selections: input.selections.map(s => ({
@@ -60,12 +66,17 @@ export const betSlipRepository = {
   },
 
   async findByUserAndRound(userId: string, roundId: string): Promise<IBetSlip | null> {
-    const doc = await BetSlipModel.findOne({ userId, roundId }).lean()
+    if (!mongoose.isValidObjectId(userId) || !mongoose.isValidObjectId(roundId)) return null
+    const doc = await BetSlipModel.findOne({
+      userId: new mongoose.Types.ObjectId(userId),
+      roundId: new mongoose.Types.ObjectId(roundId),
+    }).lean()
     return doc ? toIBetSlip(doc as unknown as RawBetSlip) : null
   },
 
   async findByRound(roundId: string): Promise<IBetSlip[]> {
-    const docs = await BetSlipModel.find({ roundId }).lean()
+    if (!mongoose.isValidObjectId(roundId)) return []
+    const docs = await BetSlipModel.find({ roundId: new mongoose.Types.ObjectId(roundId) }).lean()
     return docs.map(d => toIBetSlip(d as unknown as RawBetSlip))
   },
 }

@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 import { baseSchemaOptions } from '../index'
-export type LeagueValue = 'SERIE_A' | 'SERIE_B' | 'COPA_DO_BRASIL' | 'ESTADUAIS' | 'OTHER'
+import { type LeagueValue } from './round'
 export type ApplyWeightOn = 'DRAW_ONLY' | 'ALWAYS'
 export type ChampionshipStatus = 'ACTIVE' | 'CLOSED'
 

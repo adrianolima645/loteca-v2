@@ -8,10 +8,16 @@ on:
     branches: [stage]
     types: [opened, synchronize, ready_for_review]
 
+# Don't stack review runs — cancel the previous one if a new push arrives
+concurrency:
+  group: code-review-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
 jobs:
   review:
     name: Claude Code Review
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     # Skip draft PRs — review only when the author marks it ready
     if: github.event.pull_request.draft == false
 

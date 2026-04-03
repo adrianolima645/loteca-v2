@@ -1,15 +1,23 @@
 name: CI
 
 on:
+  # Run on PRs targeting stage or main (catches feature/* → stage and stage → main)
   pull_request:
-    branches: [stage, main, 'feature/**']
+    branches: [stage, main]
+  # Run on every push to stage or feature branches (direct commits + branch sync)
   push:
-    branches: [stage]
+    branches: [stage, 'feature/**']
+
+# Cancel in-progress runs for the same branch/PR when a newer push arrives
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   ci:
     name: Lint · Type-check · Test
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     steps:
       - name: Checkout

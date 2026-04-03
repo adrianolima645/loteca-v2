@@ -39,7 +39,7 @@ jobs:
         run: npx tsc --noEmit
 
       - name: Test
-        run: npm test -- --ci --coverage --forceExit
+        run: npx jest --ci --coverage --forceExit
         env:
           # Tests use mongodb-memory-server — no real DB needed
           NODE_ENV: test

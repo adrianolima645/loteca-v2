@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  # Run on PRs targeting stage or main (catches feature/* → stage and stage → main)
+  pull_request:
+    branches: [stage, main]
+  # Run on every push to stage or feature branches (direct commits + branch sync)
+  push:
+    branches: [stage, 'feature/**']
+
+# Cancel in-progress runs for the same branch/PR when a newer push arrives
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ci:
+    name: Lint · Type-check · Test
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Type-check
+        run: npx tsc --noEmit
+
+      - name: Test
+        run: npm test -- --ci --coverage --forceExit
+        env:
+          # Tests use mongodb-memory-server — no real DB needed
+          NODE_ENV: test

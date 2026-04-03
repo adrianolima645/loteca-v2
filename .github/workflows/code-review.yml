@@ -1,0 +1,85 @@
+name: Automated Code Review
+
+# Runs on every PR targeting the stage branch.
+# Claude reads the diff, applies the project's code-review standards
+# (from .sdd/steering/code-review.md) and posts inline comments.
+on:
+  pull_request:
+    branches: [stage]
+    types: [opened, synchronize, ready_for_review]
+
+# Don't stack review runs — cancel the previous one if a new push arrives
+concurrency:
+  group: code-review-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  review:
+    name: Claude Code Review
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    # Skip draft PRs — review only when the author marks it ready
+    if: github.event.pull_request.draft == false
+
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run automated code review
+        uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          claude_args: "--max-turns 8"
+          prompt: |
+            You are a code reviewer for the Loteca Platform — a Next.js 16 App Router
+            application with React 19, TypeScript strict mode, Tailwind CSS 4, shadcn/ui,
+            Mongoose 8, Auth.js v5, and Jest + Testing Library.
+
+            Review this pull request using the checklist below. Post findings as inline
+            comments on the relevant lines. Group your final summary as a top-level
+            PR review comment.
+
+            ## Review checklist (from .sdd/steering/code-review.md)
+
+            ### 1. Server / Client boundary
+            - Is `"use client"` at the lowest possible boundary?
+            - No data fetching inside Client Components with useEffect?
+            - No useState/hooks in files without "use client"?
+
+            ### 2. Server Actions security
+            - userId/role always read from session, never from action arguments?
+            - All action inputs validated with zod before reaching the service layer?
+            - Admin-only actions have a role === 'ADMIN' guard?
+
+            ### 3. TypeScript & type safety
+            - No `any` casts without justification?
+            - Domain errors typed as discriminated unions (Result<T,E>)?
+            - No duplicate type definitions that shadow existing domain interfaces?
+
+            ### 4. Tailwind & design system
+            - Design tokens used (bg-primary, text-muted-foreground, bg-brand) over raw colours?
+            - cn() used for conditional class composition?
+            - No inline style={{}} for things expressible in Tailwind?
+
+            ### 5. Mongoose / MongoDB
+            - .lean() used on read-only queries?
+            - Every query pattern has a matching compound index?
+            - DB singleton (lib/db) used — no raw mongoose.connect() calls?
+            - returnDocument: 'after' instead of deprecated new: true?
+
+            ### 6. Auth.js v5
+            - Server-side role guard mirrors every client-side gate?
+            - No custom OAuth flow bypassing GoogleProvider?
+
+            ### 7. Tests
+            - Tests verify behaviour, not implementation?
+            - Both happy path and error/failure path covered?
+            - No global mongoose mock — repository interface mocked instead?
+
+            Flag only real issues. Skip style preferences already enforced by ESLint.
+            Be concise and constructive.

@@ -80,7 +80,8 @@ describe('baseSchemaOptions', () => {
 
     const doc = {}
     const ret = { _id: { toString: () => 'abc123' }, __v: 0, name: 'test' }
-    const result = (transform as Function)(doc, ret)
+    type TransformFn = (doc: object, ret: Record<string, unknown>) => Record<string, unknown>
+    const result = (transform as TransformFn)(doc, ret)
 
     expect(result.id).toBe('abc123')
     expect(result._id).toBeUndefined()

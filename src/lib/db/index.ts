@@ -1,9 +1,5 @@
 import mongoose from 'mongoose'
-
-declare global {
-  // eslint-disable-next-line no-var
-  var _mongooseConnection: Promise<typeof mongoose> | undefined
-}
+import '@/types/global'
 
 export async function connectDB(): Promise<typeof mongoose> {
   // Already connected — return immediately without opening a new connection

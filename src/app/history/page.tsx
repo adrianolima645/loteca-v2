@@ -15,7 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Empty } from "@/components/ui/empty"
+import { Empty, EmptyHeader, EmptyMedia, EmptyTitle, EmptyDescription } from "@/components/ui/empty"
 
 // Mock data
 const championships = [
@@ -181,11 +181,13 @@ export default function HistoryPage() {
 
         {/* Results List */}
         {filteredBets.length === 0 ? (
-          <Empty
-            title="No bets found"
-            description="We couldn't find any bets matching the selected filters."
-            icon={<Calendar className="h-10 w-10" />}
-          />
+          <Empty>
+            <EmptyHeader>
+              <EmptyMedia variant="icon"><Calendar className="h-10 w-10" /></EmptyMedia>
+              <EmptyTitle>No bets found</EmptyTitle>
+              <EmptyDescription>We couldn&apos;t find any bets matching the selected filters.</EmptyDescription>
+            </EmptyHeader>
+          </Empty>
         ) : (
           <div className="space-y-3">
             {filteredBets.map((bet) => (

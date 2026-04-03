@@ -51,8 +51,8 @@ describe('UserModel schema', () => {
       name: 'Bob',
     })
 
-    const json = user.toJSON()
-    expect(typeof json.id).toBe('string')
+    const json = user.toJSON() as Record<string, unknown>
+    expect(typeof json['id']).toBe('string')
     expect(json._id).toBeUndefined()
     expect(json.__v).toBeUndefined()
   })

@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Empty } from "@/components/ui/empty"
+import { Empty, EmptyHeader, EmptyMedia, EmptyTitle, EmptyDescription } from "@/components/ui/empty"
 
 // Mock data
 const pastChampionships = [
@@ -125,11 +125,13 @@ export default function ChampionshipsPage() {
 
         {/* Championships Grid */}
         {filteredChampionships.length === 0 ? (
-          <Empty
-            title="No championships found"
-            description="We couldn't find any championships matching the selected filters."
-            icon={<Trophy className="h-10 w-10" />}
-          />
+          <Empty>
+            <EmptyHeader>
+              <EmptyMedia variant="icon"><Trophy className="h-10 w-10" /></EmptyMedia>
+              <EmptyTitle>No championships found</EmptyTitle>
+              <EmptyDescription>We couldn&apos;t find any championships matching the selected filters.</EmptyDescription>
+            </EmptyHeader>
+          </Empty>
         ) : (
           <div className="grid gap-4 sm:grid-cols-2">
             {filteredChampionships.map((champ) => (

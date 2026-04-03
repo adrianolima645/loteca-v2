@@ -16,10 +16,10 @@ export interface UpsertUserInput {
 // lean() returns raw BSON — toJSON transform is not applied, so _id is not
 // automatically mapped to id. This helper normalises every document coming
 // out of the repository.
-type RawDoc = { _id: mongoose.Types.ObjectId; __v?: unknown } & Omit<IUser, 'id'>
+type RawDoc = { _id: mongoose.Types.ObjectId } & Omit<IUser, 'id'>
 
 function toIUser(raw: RawDoc): IUser {
-  const { _id, __v: _version, ...rest } = raw
+  const { _id, ...rest } = raw
   return { ...rest, id: _id.toString() }
 }
 

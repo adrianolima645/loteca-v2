@@ -35,7 +35,9 @@ const statusConfig: Record<RoundStatus, { label: string; variant: "default" | "s
 
 export function RoundCard({ roundNumber, closesIn, status, score }: RoundCardProps) {
   const { label, variant, icon } = statusConfig[status]
-  const isUrgent = closesIn.includes("h") && parseInt(closesIn) < 3
+  // Parse leading hours from strings like "1h 45m" or "12h". Treat < 3 h as urgent.
+  const hoursMatch = closesIn.match(/^(\d+)h/)
+  const isUrgent = hoursMatch !== null && parseInt(hoursMatch[1], 10) < 3
 
   return (
     <Card className="min-w-[280px] shrink-0 border-border bg-card transition-all hover:border-primary/50">

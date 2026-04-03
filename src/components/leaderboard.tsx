@@ -52,9 +52,9 @@ export function Leaderboard({ entries, remainingRounds }: LeaderboardProps) {
             >
               <TableCell className="font-medium">
                 <div className="flex items-center gap-1">
-                  {entry.rank === 1 && <Trophy className="h-4 w-4 text-yellow-500" />}
-                  {entry.rank === 2 && <Trophy className="h-4 w-4 text-gray-400" />}
-                  {entry.rank === 3 && <Trophy className="h-4 w-4 text-amber-600" />}
+                  {entry.rank === 1 && <Trophy className="h-4 w-4 text-gold" />}
+                  {entry.rank === 2 && <Trophy className="h-4 w-4 text-muted-foreground" />}
+                  {entry.rank === 3 && <Trophy className="h-4 w-4 text-gold/60" />}
                   <span className={entry.isCurrentUser ? "text-primary" : "text-foreground"}>
                     {entry.rank}
                   </span>

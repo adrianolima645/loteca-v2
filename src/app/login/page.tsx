@@ -18,19 +18,8 @@ export default function LoginPage() {
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-background p-4">
       {/* Background Pattern */}
       <div className="absolute inset-0 overflow-hidden">
-        {/* Diagonal stripes pattern */}
-        <div
-          className="absolute inset-0 opacity-[0.03]"
-          style={{
-            backgroundImage: `repeating-linear-gradient(
-              45deg,
-              transparent,
-              transparent 40px,
-              hsl(var(--primary)) 40px,
-              hsl(var(--primary)) 80px
-            )`
-          }}
-        />
+        {/* Diagonal stripes pattern — defined in globals.css as .bg-stripes */}
+        <div className="absolute inset-0 bg-stripes opacity-[0.03]" />
         {/* Stadium silhouette gradient */}
         <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-primary/5 to-transparent" />
         {/* Subtle radial glow */}

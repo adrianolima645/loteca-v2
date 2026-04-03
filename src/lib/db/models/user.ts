@@ -3,6 +3,10 @@ import { baseSchemaOptions } from '../index'
 
 export type UserRole = 'USER' | 'ADMIN'
 
+/**
+ * Public shape returned by the repository layer (lean documents).
+ * `id` is a string mapped from `_id` by the toJSON transform in baseSchemaOptions.
+ */
 export interface IUser {
   id: string
   googleId: string
@@ -15,7 +19,13 @@ export interface IUser {
   updatedAt: Date
 }
 
-const userSchema = new mongoose.Schema<IUser>(
+/**
+ * Stored document shape — mirrors IUser but without the virtual `id` field
+ * so that mongoose.Schema<IUserDoc> typechecks correctly against stored fields.
+ */
+type IUserDoc = Omit<IUser, 'id'>
+
+const userSchema = new mongoose.Schema<IUserDoc>(
   {
     googleId: { type: String, required: true, unique: true },
     email:    { type: String, required: true, unique: true },
@@ -27,6 +37,6 @@ const userSchema = new mongoose.Schema<IUser>(
   baseSchemaOptions,
 )
 
-export const UserModel =
-  (mongoose.models.User as mongoose.Model<IUser> | undefined) ??
-  mongoose.model<IUser>('User', userSchema)
+export const UserModel: mongoose.Model<IUserDoc> =
+  (mongoose.models.User as mongoose.Model<IUserDoc> | undefined) ??
+  mongoose.model<IUserDoc>('User', userSchema)

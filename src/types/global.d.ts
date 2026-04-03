@@ -1,5 +1,5 @@
-import type mongoose from 'mongoose'
+export {}
 
 declare global {
-  var _mongooseConnection: Promise<typeof mongoose> | undefined
+  var _mongooseConnection: Promise<import('mongoose')> | undefined
 }

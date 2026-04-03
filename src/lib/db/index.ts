@@ -1,5 +1,4 @@
 import mongoose from 'mongoose'
-import '@/types/global'
 
 export async function connectDB(): Promise<typeof mongoose> {
   // Already connected — return immediately without opening a new connection

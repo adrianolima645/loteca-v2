@@ -24,6 +24,7 @@ The **Loteca Platform** is a social betting application focused exclusively on B
 4. If a user submits a registration with an already-registered email, the Loteca Platform shall reject the request and notify the user.
 5. The Loteca Platform shall support at minimum the roles: **User** (places bets, views standings) and **Admin** (configures rounds, championships, scoring rules).
 6. While a user is authenticated, the Loteca Platform shall maintain session state across navigation without requiring re-login within the session lifetime.
+7. The Loteca Platform shall persist the user's display theme preference (light / dark / system) and apply it on every page load without flash.
 
 ---
 
@@ -148,3 +149,16 @@ The **Loteca Platform** is a social betting application focused exclusively on B
 3. When official results are published for a round, the Loteca Platform shall notify all users who participated in that round with their score summary.
 4. The Loteca Platform shall support at minimum in-platform (UI) notifications; email notifications are optional and configurable per user preference.
 5. If a user disables email notifications in their account settings, the Loteca Platform shall suppress email sends for that user while preserving in-platform notifications.
+
+---
+
+### Requirement 11: Display Theme Preference
+
+**Objective:** As a user, I want to toggle between light and dark mode, so that I can use the platform comfortably in different lighting conditions.
+
+#### Acceptance Criteria
+1. The Loteca Platform shall provide a theme toggle control (light / dark / system) accessible from the navigation bar on every page.
+2. When a user selects a theme, the Loteca Platform shall apply it immediately without a full page reload.
+3. The selected theme shall be persisted in `localStorage` so that it is restored on the next visit without a flash of unstyled content (FOUC).
+4. When the theme is set to **system**, the Loteca Platform shall follow the OS-level `prefers-color-scheme` preference and update automatically if the OS preference changes.
+5. The theme toggle shall be operable by keyboard and meet WCAG 2.1 AA contrast requirements in both light and dark modes.

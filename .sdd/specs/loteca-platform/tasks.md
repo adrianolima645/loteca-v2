@@ -63,6 +63,12 @@
   - Replace hardcoded user name/avatar in `Navbar` with session data
   - _Requirements: 1.2, 1.3, 1.6_
 
+- [ ] 2.4 Add dark / light / system theme toggle to navbar
+  - Add a `ThemeToggle` client component (icon button cycling light → dark → system) using `next-themes` `setTheme`
+  - Mount it in `Navbar` alongside the existing nav items
+  - Verify `ThemeProvider` has `storageKey`, `enableSystem`, and `disableTransitionOnChange` set so there is no FOUC
+  - _Requirements: 1.7, 11.1, 11.2, 11.3, 11.4, 11.5_
+
 ---
 
 - [ ] 3. Round lifecycle management

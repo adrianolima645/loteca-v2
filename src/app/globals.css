@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* ─── Dark mode: class-based (next-themes sets class="dark" on <html>) ───────── */
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* ─── Design Tokens (Tailwind v4 @theme — generates utility classes) ────────── */
 
 @theme inline {
